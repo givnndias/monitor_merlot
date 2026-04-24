@@ -139,6 +139,8 @@ Esses tópicos precisam estar coerentes com o provisioning do FIWARE no Postman.
 
 ## Configuração no Wokwi
 
+-Link Wokwi: https://wokwi.com/projects/461824683651877889
+
 No Wokwi, o projeto deve conter:
 - ESP32
 - sensor DHT22
