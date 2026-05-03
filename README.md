@@ -40,6 +40,8 @@ O objetivo do sistema é:
 
 ## Arquitetura da solução
 
+<img src="arquitetura.drawio.png">
+
 O fluxo do sistema funciona assim:
 
 1. O **ESP32** lê os sensores de luminosidade, temperatura e umidade.
