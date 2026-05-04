@@ -37,7 +37,7 @@ const char* default_SSID = "Wokwi-GUEST";    // Nome da rede Wi-Fi (Wokwi)
 const char* default_PASSWORD = "";           // Senha (vazia no Wokwi)
 
 // IP do broker MQTT (FIWARE rodando no Cloud)
-const char* default_BROKER_MQTT = "34.55.209.28";
+const char* default_BROKER_MQTT = "34.55.148.224";
 const int   default_BROKER_PORT = 1883;
 
 // Tópicos MQTT usados pelo IoT Agent
@@ -283,9 +283,15 @@ void reconnectMQTT() {
 void handleSensors() {
   // --- Luminosidade (LDR) ---
   int ldrValue = analogRead(LDR_PIN);
-  int luminosity = map(ldrValue, 0, 4095, 0, 100); // Converte para porcentagem
+
+  // Corrige leitura invertida do LDR
+  int luminosity = map(ldrValue, 0, 4095, 100, 0);
+  luminosity = constrain(luminosity, 0, 100);
+
   String lumStr = String(luminosity);
-  MQTT.publish(default_TOPICO_PUBLISH_2, lumStr.c_str()); // Envia ao FIWARE
+
+  MQTT.publish(default_TOPICO_PUBLISH_2, lumStr.c_str());
+
   Serial.print("Luminosidade: ");
   Serial.print(lumStr);
   Serial.println(" %");
@@ -298,11 +304,9 @@ void handleSensors() {
     String tempStr = String(temp, 1);
     String humStr  = String(hum, 1);
 
-    // Publica os valores no FIWARE
     MQTT.publish(default_TOPICO_PUBLISH_3, tempStr.c_str());
     MQTT.publish(default_TOPICO_PUBLISH_4, humStr.c_str());
 
-    // Verifica se há alguma anomalia
     checkAlerts(temp, hum, luminosity);
 
     Serial.print(" | Temperatura: ");
